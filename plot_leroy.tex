@@ -1,0 +1,66 @@
+% Tutaj znacznik [h] pozwala wymusić rzeby ten obiekt 
+% dostępne są równierz inne np t -top albo nawet wymuszenie przez dodatkowy !
+% byłoby wtedy [h!]
+% Here the [h] tag allows you to force this object
+% others are also available, eg t-top or even forcing with an extra !
+% would then be [h!]
+
+% Inny przydatny przykład
+%  https://reijz.github.io/2016/01/25/pgfplotstable.html
+
+\begin{figure}[h]
+ \centering
+        \begin{tikzpicture}
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       KONFIGURACJA OSI        
+        \begin{axis}[
+            width=0.5\textwidth,
+            %height=0.5\textwidth,
+            %normalsize,
+            scale only axis,
+            xlabel={\Large{$\frac{\omega \cdot r}{V} \cdot \a$}},
+            %xlabel={\Large{$\frac{\omega r}{V}$}},
+            %ylabel={$\cdot/ \delta$},
+            %ymin=-0.1,
+            ymax=1,
+            %xmin=0,
+            %xmax=6,
+            %legend style={font=\small,at={(0.8,0.3)},anchor=north,style={nodes={right}}},
+        ]
+% Data to plot are in an ordinary file: ler.tex
+        \addplot[draw=blue] table[x=CLX, y=CLY] {ler.txt};
+
+        \addplot[draw=red, dashed,
+% jakby miały trafić się jakieś niechciane zera 0 to mogę je automatycznie pomijać:
+% If there are any unwanted zeros 0, We can skip them automatically:
+        y filter/.expression={y==0 ? nan : y},
+        ] table[x=CDX, y=CDY] {ler.txt};
+
+% jak mamy dane w pliku to mozemy na ich podstawie policzyc funkcje
+% tutaj biorę kolumnę CDX bo taką mam i wykorzystam ją jako x,
+% i na jej podstawie liczę sobie np: f(x)=0.1+0.05*x
+% IF we have data in the file, we can calculate functions based on them
+% here I take the CDX column because that's what I have and I'll use it as x,
+% and based on it I calculate e.g.: f(x)=0.1+0.05*x
+
+%                                       konrzystam ze zminnej a = 0.1        
+        \addplot[dashed, color=black, smooth]
+        table[x=CDX, y expr=\a+0.05*\thisrow{CDX}]  {ler.txt};
+
+% możemy wstawić dowolny mały napisik
+% We can insert any small string
+%                                       konrzystam ze zminnej b = 11
+        \node [] at (axis cs: 2,0.1)	{\small{$B=\b$}};
+
+% możemy wstawić krzywą z funkcji bez żadnego pliku i to nawet jako strzałka:
+% We can insert the curve from the function without any file and even as an arrow:
+        \addplot [domain=1:4, samples=100, color=green,->]    {-0.04+0.1*\a*(x^2)};
+
+% legendę można ogarnąć w inny sposób bo zamiast za każdym razem wstawiać \addlegendentry{} można wstawić na końcu \legend{} i po przecinku powstawiać opisy i w taki sposób można pominąć którąś serię. Liczy się kolejność wstawiania.
+% The legend can be handled in a different way because instead of inserting \addlegendentry{} every time, you can insert \legend{} at the end and put descriptions after a comma, and in this way, you can skip some series. The insertion order matters.        
+        \legend{,,My line,Rising line};
+        
+        \end{axis}
+        \end{tikzpicture}
+    \caption{Values of the aerodynamic coefficients.}
+    \end{figure}

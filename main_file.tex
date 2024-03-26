@@ -1,0 +1,49 @@
+% This is a very simple example of pgfplot application.
+% Optional lines of code are included and ready to use
+% be free to visit:
+% http://pgfplots.sourceforge.net/gallery.html
+\documentclass{article}[12]
+\usepackage[utf8]{inputenc}
+
+\usepackage{filecontents}
+\usepackage{pgfplots}
+\usepackage{polski}
+\pgfplotsset{compat=newest}
+%\usepgfplotslibrary{patchplots}
+
+\usepackage{pgfplotstable}
+\title{Test pgfplot}
+\author{Konrad Gumowski}
+\date{\today}
+%\pgfplotsset{width=6cm,compat=newest}
+
+% tutaj deklaruje sobie zmienne a=0.1 raz b=11
+\def \a{0.1}
+\def \b{18}
+
+\begin{document}
+
+
+%\maketitle
+
+    This is a project with an example of using the \textit{pgfplot} library. Such a package allows you to create graphs directly from a text data file but also to draw any functions.
+    \vspace{5mm}
+    
+    To jest projekt z przykładem użycia biblioteki \textit{pgfplot}. Taki pakiet pozwala na tworzenie wykresów bezpośrednio z pliku z danych tekstowych, ale też rysowanie dowolnych funkcji.
+
+   
+   \input{plot_leroy.tex}
+
+   \pgfplotstabletypeset[
+	col sep=space,
+ every head row/.style={before row=\hline,after row=\hline},	% style the first row
+	every last row/.style={after row=\hline},	% style the last row
+	every first column/.style={column type/.add={|}{}},	% style the first column
+	every last column/.style={column type/.add={}{|}},	% style the last column
+	%columns/CLX/.style={string type}
+ %columns={CLX,CLY}
+ skip rows between index={0}{3},
+ skip rows between index={12}{100},
+]{ler.txt}
+
+\end{document}
